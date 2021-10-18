@@ -5,7 +5,7 @@ import UserService from '../services/User.service';
 import { createUser, updateUser } from '../dtos/User.dto';
 import Console from '../lib/Console';
 import Response from '../lib/Response';
-import { authMiddleware } from '../middlewares/Auth';
+import authMiddleware from '../middlewares/Auth';
 
 const router = express.Router();
 const console = new Console('USER-CONTROLLER');
@@ -30,7 +30,7 @@ router.get('/', async (req, res) => {
     const userService = await UserService.getInstance();
     const users = await userService.getAll();
     console.success('GET ALL USERS');
-    response.success(res, users);
+    response.success(res, users.toString());
   } catch (error) {
     console.error((error as Error)?.message);
     response.error(res, (error as Error)?.message, 500);
@@ -49,7 +49,7 @@ router.get('/:uuid', async (req, res) => {
       return;
     }
     console.success(`GET USER: ${uuid}`);
-    response.success(res, user);
+    response.success(res, user.toString());
     return;
   } catch (error) {
     console.error((error as Error)?.message);
@@ -70,7 +70,7 @@ router.post(
     const userService = await UserService.getInstance();
     const user = await userService.create(name, lastName, email, phone, organization, password);
     console.success(`CREATE USER: ${user.uuid}`);
-    response.success(res, user);
+    response.success(res, user.toString());
   },
 );
 
@@ -92,7 +92,7 @@ router.put('/:uuid', validationMiddleware(updateUser), async (req, res) => {
       password,
     );
     console.success(`User updated: ${uuid}`);
-    return response.success(res, userUpdated, 200);
+    return response.success(res, userUpdated.toString(), 200);
   } catch (error) {
     console.error((error as Error)?.message);
     return response.error(res, (error as Error)?.message, 500);
@@ -109,7 +109,7 @@ router.delete('/:uuid', async (req, res) => {
     const userService = await UserService.getInstance();
     const userDeleted = await userService.delete(uuid);
     console.success(`User deleted: ${uuid}`);
-    response.success(res, userDeleted);
+    response.success(res, userDeleted.toString());
   } catch (error) {
     console.error((error as Error)?.message);
     return response.error(res, (error as Error)?.message, 500);
@@ -130,7 +130,7 @@ router.get('/:uuid/reservations', async (req, res) => {
       return response.success(res, 'User has no reservations');
     }
     console.success(`Reservations of: ${uuid}`);
-    response.success(res, userReservations);
+    response.success(res, userReservations.toString());
   } catch (error) {
     console.error((error as Error)?.message);
     return response.error(res, (error as Error)?.message, 500);
