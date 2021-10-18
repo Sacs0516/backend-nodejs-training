@@ -73,7 +73,7 @@ class UserService {
     }
 
     const user = await this.getOne(uuid);
-    const hashedPassword = await bcrypt.hash(password, 10);
+    //const hashedPassword = await bcrypt.hash(password, 10);
 
     if (!user) {
       throw new Error ('User not found');
@@ -84,7 +84,7 @@ class UserService {
     user.email = email || user.email;
     user.phone = phone || user.phone;
     user.organization = organization || user.organization;
-    user.auth.password = hashedPassword || user.auth.password;
+    user.auth.password = password || user.auth.password;
 
     return this.userRepository.save(user);
   }
