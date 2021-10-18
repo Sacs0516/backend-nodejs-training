@@ -16,7 +16,7 @@ class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column('uuid')
   @Generated('uuid')
   uuid: string;
 
